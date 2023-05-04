@@ -1,6 +1,7 @@
 import sidebar from './images/sidebar.png';
 import account from './images/account.png';
 import add from './images/add.png';
+import addTaskLoad from './add-task';
 
 export default function headerLoad() {
   const header = document.querySelector('header');
@@ -53,4 +54,8 @@ export default function headerLoad() {
       footer.style.gridArea = '3/2/4/3'
     };
   });
+
+  // displaying "Add task" form on main
+  addImg.addEventListener('click', addTaskLoad);
+
 };

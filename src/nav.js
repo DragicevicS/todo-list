@@ -6,6 +6,8 @@ import home from './images/home.png';
 import work from './images/work.png';
 import personal from './images/personal.png';
 import hobbies from './images/hobbies.png';
+import other from './images/other.png';
+import { homeLoad, todayLoad, thisWeekLoad, importantLoad, workLoad, personalLoad, hobbiesLoad, otherLoad } from './main';
 
 export default function navLoad() {
   const nav = document.querySelector('nav');
@@ -41,33 +43,29 @@ export default function navLoad() {
   ul1.appendChild(newLi());
   ul1.appendChild(newLi());
 
-  const homeA = newA();
-  ul1.firstElementChild.appendChild(homeA);
-  homeA.appendChild(newImg());
-  homeA.appendChild(newP());
-  homeA.firstElementChild.setAttribute('src', home);
-  homeA.lastElementChild.textContent = 'Home';
+  ul1.firstElementChild.appendChild(newImg());
+  ul1.firstElementChild.appendChild(newP());
+  ul1.firstElementChild.firstElementChild.setAttribute('src', home);
+  ul1.firstElementChild.lastElementChild.textContent = 'Home';
+  ul1.firstElementChild.addEventListener('click', homeLoad);
 
-  const todayA = newA();
-  ul1.children[1].appendChild(todayA);
-  todayA.appendChild(newImg());
-  todayA.appendChild(newP());
-  todayA.firstElementChild.setAttribute('src', today);
-  todayA.lastElementChild.textContent = 'Today';
+  ul1.children[1].appendChild(newImg());
+  ul1.children[1].appendChild(newP());
+  ul1.children[1].firstElementChild.setAttribute('src', today);
+  ul1.children[1].lastElementChild.textContent = 'Today';
+  ul1.children[1].addEventListener('click', todayLoad);
 
-  const thisWeekA = newA();
-  ul1.children[2].appendChild(thisWeekA);
-  thisWeekA.appendChild(newImg());
-  thisWeekA.appendChild(newP());
-  thisWeekA.firstElementChild.setAttribute('src', week);
-  thisWeekA.lastElementChild.textContent = 'This Week';
+  ul1.children[2].appendChild(newImg());
+  ul1.children[2].appendChild(newP());
+  ul1.children[2].firstElementChild.setAttribute('src', week);
+  ul1.children[2].lastElementChild.textContent = 'This Week';
+  ul1.children[2].addEventListener('click', thisWeekLoad);
 
-  const importantA = newA();
-  ul1.lastElementChild.appendChild(importantA);
-  importantA.appendChild(newImg());
-  importantA.appendChild(newP());
-  importantA.firstElementChild.setAttribute('src', star);
-  importantA.lastElementChild.textContent = 'Important';
+  ul1.lastElementChild.appendChild(newImg());
+  ul1.lastElementChild.appendChild(newP());
+  ul1.lastElementChild.firstElementChild.setAttribute('src', star);
+  ul1.lastElementChild.lastElementChild.textContent = 'Important';
+  ul1.lastElementChild.addEventListener('click', importantLoad);
 
   nav.appendChild(document.createElement('hr'));
 
@@ -78,24 +76,28 @@ export default function navLoad() {
   ul2.appendChild(newLi());
   ul2.appendChild(newLi());
 
-  const workA = newA();
-  ul2.firstElementChild.appendChild(workA);
-  workA.appendChild(newImg());
-  workA.appendChild(newP());
-  workA.firstElementChild.setAttribute('src', work);
-  workA.lastElementChild.textContent = 'Work';
+  ul2.firstElementChild.appendChild(newImg());
+  ul2.firstElementChild.appendChild(newP());
+  ul2.firstElementChild.firstElementChild.setAttribute('src', work);
+  ul2.firstElementChild.lastElementChild.textContent = 'Work';
+  ul2.firstElementChild.addEventListener('click', workLoad);
 
-  const personalA = newA();
-  ul2.children[1].appendChild(personalA);
-  personalA.appendChild(newImg());
-  personalA.appendChild(newP());
-  personalA.firstElementChild.setAttribute('src', personal);
-  personalA.lastElementChild.textContent = 'Personal';
+  ul2.children[1].appendChild(newImg());
+  ul2.children[1].appendChild(newP());
+  ul2.children[1].firstElementChild.setAttribute('src', personal);
+  ul2.children[1].lastElementChild.textContent = 'Personal';
+  ul2.children[1].addEventListener('click', personalLoad);
 
-  const hobbiesA = newA();
-  ul2.children[2].appendChild(hobbiesA);
-  hobbiesA.appendChild(newImg());
-  hobbiesA.appendChild(newP());
-  hobbiesA.firstElementChild.setAttribute('src', hobbies);
-  hobbiesA.lastElementChild.textContent = 'Hobbies';
+  ul2.children[2].appendChild(newImg());
+  ul2.children[2].appendChild(newP());
+  ul2.children[2].firstElementChild.setAttribute('src', hobbies);
+  ul2.children[2].lastElementChild.textContent = 'Hobbies';
+  ul2.children[2].addEventListener('click', hobbiesLoad);
+
+  ul2.lastElementChild.appendChild(newImg());
+  ul2.lastElementChild.appendChild(newP());
+  ul2.lastElementChild.firstElementChild.setAttribute('src', other);
+  ul2.lastElementChild.lastElementChild.textContent = 'Other';
+  ul2.lastElementChild.addEventListener('click', otherLoad)
+
 };
