@@ -27,7 +27,7 @@ export default function addTaskLoad() {
   form.appendChild(titleInput);
 
   const detailsLabel = newLabel();
-  detailsLabel.textContent = 'Details';
+  detailsLabel.textContent = 'Details (optional)';
   const detailsTextarea = document.createElement('textarea');
   detailsTextarea.setAttribute('name', 'details');
   detailsTextarea.setAttribute('id', 'details');
@@ -39,16 +39,15 @@ export default function addTaskLoad() {
   form.appendChild(detailsTextarea);
 
   const categoryLabel = newLabel();
-  categoryLabel.textContent = 'Choose category:';
+  categoryLabel.textContent = 'Choose category';
   const categorySelect = document.createElement('select');
   categorySelect.setAttribute('name', 'category');
   categorySelect.setAttribute('id', 'category');
   categorySelect.required = true;
   const optionBlank = newOption();
   optionBlank.textContent = '';
-  optionBlank.disabled = true;
   optionBlank.selected = true;
-  optionBlank.value = true;
+  optionBlank.value = '';
   const optionWork = newOption();
   optionWork.textContent = 'Work';
   optionWork.value = 'Work';
@@ -78,14 +77,14 @@ export default function addTaskLoad() {
   const importantInputYes = newInput();
   importantInputYes.setAttribute('type', 'radio');
   importantInputYes.setAttribute('name', 'important');
-  importantInputYes.setAttribute('id', 'yes');
+  importantInputYes.setAttribute('id', 'true');
   const importantInputYesLabel = newLabel();
   importantInputYesLabel.textContent = 'Yes';
   importantInputYesLabel.setAttribute('for', 'yes');
   const importantInputNo = newInput();
   importantInputNo.setAttribute('type', 'radio');
   importantInputNo.setAttribute('name', 'important');
-  importantInputNo.setAttribute('id', 'no');
+  importantInputNo.setAttribute('id', 'false');
   importantInputNo.checked = true;
   const importantInputNoLabel = newLabel();
   importantInputNoLabel.textContent = 'No';
@@ -119,4 +118,27 @@ export default function addTaskLoad() {
   submitBtn.value = 'Add'
   btnDiv.appendChild(submitBtn);
   form.appendChild(btnDiv);
+
+
+  const createTask = (title, details, category, important, date, checked) => {
+    return {title, details, category, important, date, checked};
+  };
+  
+  let defaultTaskList = [];
+  let taskList = localStorage.getItem('taskList');
+  taskList = JSON.parse(taskList || JSON.stringify(defaultTaskList));
+
+  submitBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('title').value;
+    const details = document.getElementById('details').value;
+    const category = document.getElementById('category').value;
+    const important = document.querySelector('input[name="important"]:checked').id;
+    const date = document.getElementById('date').value;
+
+    const newTask = createTask(title, details, category, important, date, 'false');
+    taskList.push(newTask);
+    window.localStorage.setItem('taskList', JSON.stringify(taskList));
+  });
 };
+
