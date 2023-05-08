@@ -4,6 +4,7 @@ import star from './images/star.png';
 import starEmpty from './images/star-empty.png';
 import info from './images/info.png';
 import remove from './images/remove.png';
+import { format, isThisWeek } from 'date-fns';
 
 const newDiv = () => document.createElement('div');
 const newImg = () => document.createElement('img');
@@ -16,13 +17,14 @@ const h2 = document.createElement('h2');
 const taskListDiv = newDiv();
 taskListDiv.classList.add('task-list-div');
 
-function listTasks() {
+function listTasks(category) {
   taskListDiv.textContent = '';
   let defaultTaskList = [];
   let taskList = localStorage.getItem('taskList');
   taskList = JSON.parse(taskList || JSON.stringify(defaultTaskList));
-  
+
   for (let i=0; i < taskList.length; i++) {
+    let currentDate = new Date().toJSON().slice(0, 10);
     const checkedImg = newImg();
     checkedImg.setAttribute('src', checked);
     checkedImg.classList.add('list-img');
@@ -42,43 +44,45 @@ function listTasks() {
     removeImg.setAttribute('src', remove);
     removeImg.classList.add('list-img', 'remove-img');
 
-    let task = taskList[i];
-    let taskInfo = newDiv();
-    taskInfo.setAttribute('id', i);
-    taskInfo.classList.add('list-item');
+    function appendList() {
+      let task = taskList[i];
+      let taskInfo = newDiv();
+      taskInfo.setAttribute('id', i);
+      taskInfo.classList.add('list-item');
 
-    if (task.checked == 'false') taskInfo.appendChild(uncheckedImg);
-    if (task.checked == 'true') taskInfo.appendChild(checkedImg);
+      if (task.checked == 'false') taskInfo.appendChild(uncheckedImg);
+      if (task.checked == 'true') taskInfo.appendChild(checkedImg);
 
-    const title = newSpan();
-    title.textContent = task.title;
-    taskInfo.appendChild(title);
+      const title = newSpan();
+      title.textContent = task.title;
+      taskInfo.appendChild(title);
 
-    const date = newSpan();
-    date.textContent = task.date;
-    taskInfo.appendChild(date);
+      const date = newSpan();
+      date.textContent = task.date;
+      taskInfo.appendChild(date);
 
-    if (task.important == 'false') taskInfo.appendChild(starEmptyImg);
-    if (task.important == 'true') taskInfo.appendChild(starImg);
+      if (task.important == 'false') taskInfo.appendChild(starEmptyImg);
+      if (task.important == 'true') taskInfo.appendChild(starImg);
 
-    taskInfo.appendChild(infoImg);
-    taskInfo.appendChild(removeImg);
+      taskInfo.appendChild(infoImg);
+      taskInfo.appendChild(removeImg);
 
-    taskListDiv.appendChild(taskInfo);
+      taskListDiv.appendChild(taskInfo);
+    };
+
+    if (category == 'home') { appendList(); removeTask(category); }
+    else if (category == 'today') { if (taskList[i].date == currentDate) appendList(); removeTask(category); }
+    else if (category == 'this week') { if (isThisWeek(new Date(taskList[i].date))) appendList(); removeTask(category); }
+    else if (category == 'important') { if (taskList[i].important == 'true') appendList(); removeTask(category); }
+    else if (category == 'work') { if (taskList[i].category == 'Work') appendList(); removeTask(category); }
+    else if (category == 'personal') { if (taskList[i].category == 'Personal') appendList(); removeTask(category); }
+    else if (category == 'hobbies') { if (taskList[i].category == 'Hobbies') appendList(); removeTask(category); }
+    else if (category == 'other') { if (taskList[i].category == 'Other') appendList(); removeTask(category); }
+    else return;
   };
 };
 
-
-
-
-
-export function homeLoad() {
-  contentDiv.textContent = '';
-  h2.textContent = 'Home - All Tasks';
-  contentDiv.appendChild(h2);
-  contentDiv.appendChild(taskListDiv);
-  listTasks();
-
+const removeTask = (category) => {
   const removeBtn = document.querySelectorAll('.remove-img');
   for (let i=0; i < removeBtn.length; i++) {
   removeBtn[i].addEventListener('click', (e) => {
@@ -86,9 +90,17 @@ export function homeLoad() {
     const taskList = JSON.parse(localStorage.getItem('taskList'));
     taskList.splice(taskId, 1);
     localStorage.setItem('taskList', JSON.stringify(taskList));
-    listTasks();
+    listTasks(category);
   });
   };
+};
+
+export function homeLoad() {
+  contentDiv.textContent = '';
+  h2.textContent = 'Home - All Tasks';
+  contentDiv.appendChild(h2);
+  contentDiv.appendChild(taskListDiv);
+  listTasks('home');
 };
 
 export function todayLoad() {
@@ -97,6 +109,7 @@ export function todayLoad() {
   contentDiv.appendChild(h2);
   contentDiv.appendChild(taskListDiv);
   taskListDiv.textContent = '';
+  listTasks('today');
 };
 
 export function thisWeekLoad() {
@@ -105,6 +118,7 @@ export function thisWeekLoad() {
   contentDiv.appendChild(h2);
   contentDiv.appendChild(taskListDiv);
   taskListDiv.textContent = '';
+  listTasks('this week');
 };
 
 export function importantLoad() {
@@ -113,6 +127,7 @@ export function importantLoad() {
   contentDiv.appendChild(h2);
   contentDiv.appendChild(taskListDiv);
   taskListDiv.textContent = '';
+  listTasks('important');
 };
 
 export function workLoad() {
@@ -121,6 +136,7 @@ export function workLoad() {
   contentDiv.appendChild(h2);
   contentDiv.appendChild(taskListDiv);
   taskListDiv.textContent = '';
+  listTasks('work');
 };
 
 export function personalLoad() {
@@ -129,6 +145,7 @@ export function personalLoad() {
   contentDiv.appendChild(h2);
   contentDiv.appendChild(taskListDiv);
   taskListDiv.textContent = '';
+  listTasks('personal');
 };
 
 export function hobbiesLoad() {
@@ -137,6 +154,7 @@ export function hobbiesLoad() {
   contentDiv.appendChild(h2);
   contentDiv.appendChild(taskListDiv);
   taskListDiv.textContent = '';
+  listTasks('hobbies');
 };
 
 export function otherLoad() {
@@ -145,4 +163,5 @@ export function otherLoad() {
   contentDiv.appendChild(h2);
   contentDiv.appendChild(taskListDiv);
   taskListDiv.textContent = '';
+  listTasks('other');
 };
