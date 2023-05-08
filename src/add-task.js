@@ -119,7 +119,6 @@ export default function addTaskLoad() {
   btnDiv.appendChild(submitBtn);
   form.appendChild(btnDiv);
 
-
   const createTask = (title, details, category, important, date, checked) => {
     return {title, details, category, important, date, checked};
   };

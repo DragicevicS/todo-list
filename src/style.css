@@ -31,19 +31,16 @@ header {
   justify-content: center;
   width: max(100%, 350px);
   background-color: var(--color-2);
+  box-shadow: 0 0 10px;
 }
 
 header img {
-  -webkit-filter: grayscale(100%);
-  filter: grayscale(100%);
-  -webkit-transition: .3s ease-in-out;
-  transition: .3s ease-in-out;
+  transition: transform .2s ease;
 }
 
 header img:hover {
   cursor: pointer;
-  -webkit-filter: grayscale(0);
-	filter: grayscale(0);
+  transform: scale(1.1);
 }
 
 .sidebar-btn-div {
@@ -90,6 +87,7 @@ nav {
   padding: 3px;
   background-color: var(--color-3);
   font-family: 'Oswald', sans-serif;
+  box-shadow: 0 0 10px;
 }
 
 .nav-logo-div {
@@ -124,11 +122,13 @@ nav li {
   color: var(--color-4);
   font-size: 1.5rem;
   cursor: pointer;
+  transition: transform .1s ease;
 }
 
 nav ul li:hover {
   background-color: #0F4C75;
   transition: 0.3 ease-in-out;
+  transform: scale(1.05);
 }
 
 nav li>img {
@@ -235,9 +235,14 @@ main {
 /* main - lists */
 
 .task-list-div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
   width: 100%;
-  height: 100%;
+  max-height: 100%;
   font-family: 'Oswald', sans-serif;
+  overflow: auto;
 }
 
 .list-item {
@@ -249,6 +254,8 @@ main {
   width: 100%;
   height: 3em;
   border: solid 1px var(--color-4);
+  transition: transform .1s ease;
+  text-decoration: line-through;
 }
 
 .list-img {
@@ -258,6 +265,24 @@ main {
 
 .list-img:hover {
   cursor: pointer;
+}
+
+.list-item:hover {
+  background-color: var(--color-3);
+  transform: scale(1.01);
+}
+
+/* main - details */
+
+.details-div {
+  position: absolute;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 50%;
+  height: 50%;
+  background-color: var(--color-3);
+  color: var(--color-4);
+  border: solid 1px black;
 }
 
 /* footer */
@@ -271,4 +296,5 @@ footer {
   color: var(--color-4);
   font-family: Arial, Helvetica, sans-serif;
   font-style: italic;
+  box-shadow: 2px 0 10px black;
 }
