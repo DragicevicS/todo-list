@@ -190,7 +190,7 @@ main {
 #details,
 #category,
 #date,
-#submit {
+.btn {
   font-size: 1.2rem;
   padding: 10px;
   background-color: var(--color-1);
@@ -203,19 +203,19 @@ main {
 #details:hover,
 #category:hover,
 #date:hover,
-#submit:hover {
+.btn:hover {
   border: solid 2px var(--color-2);
 }
 
 #category:hover,
 #date:hover,
-#submit:hover,
+.btn:hover,
 #true:hover,
 #false:hover {
   cursor: pointer;
 }
 
-#submit:hover {
+.btn:hover {
   transform: scale(1.05);
 }
 
@@ -237,15 +237,23 @@ main {
 }
 
 .btn-div {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+  margin-top: 1em;
 }
 
-#submit {
+.btn {
   padding: 0.5em 1.1em;
   font-family: 'Sigmar', cursive;
   font-style: italic;
   font-size: 1.4rem;
   transition: transform .2s ease;
+}
+
+form p {
+  margin-top: 1em;
 }
 
 /* main - lists */

@@ -15,7 +15,6 @@ export default function navLoad() {
   const newDiv = () => document.createElement('div');
   const newImg = () => document.createElement('img');
   const newLi = () => document.createElement('li');
-  const newA = () => document.createElement('a');
   const newP = () => document.createElement('p');
 
   const navLogoDiv = newDiv();
@@ -98,6 +97,5 @@ export default function navLoad() {
   ul2.lastElementChild.appendChild(newP());
   ul2.lastElementChild.firstElementChild.setAttribute('src', other);
   ul2.lastElementChild.lastElementChild.textContent = 'Other';
-  ul2.lastElementChild.addEventListener('click', otherLoad)
-
+  ul2.lastElementChild.addEventListener('click', otherLoad);
 };

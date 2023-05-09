@@ -5,6 +5,7 @@ import starEmpty from './images/star-empty.png';
 import info from './images/info.png';
 import remove from './images/remove.png';
 import { isToday, isThisWeek } from 'date-fns';
+import editTaskLoad from './edit-task';
 
 const newDiv = () => document.createElement('div');
 const newImg = () => document.createElement('img');
@@ -66,7 +67,7 @@ function listTasks(category) { // displays tasks filtering them based on categor
     removeImg.setAttribute('src', remove);
     removeImg.classList.add('list-img', 'remove');
 
-    function appendList(category) { // appends all html elements for selected task 
+    function appendList() { // appends all html elements for selected task 
       let task = taskList[i];
       let taskInfo = newDiv();
       taskInfo.setAttribute('id', i);
@@ -101,15 +102,14 @@ function listTasks(category) { // displays tasks filtering them based on categor
     };
 
     // filtering task based on which category they belong and displaying them accordingly
-    if (category == 'home') appendList(category);
-    else if (category == 'today') { if (isToday(new Date(taskList[i].date))) appendList(category); }
-    else if (category == 'this week') { if (isThisWeek(new Date(taskList[i].date))) appendList(category); }
-    else if (category == 'important') { if (taskList[i].important == 'true') appendList(category); }
-    else if (category == 'work') { if (taskList[i].category == 'Work') appendList(); }
-    else if (category == 'personal') { if (taskList[i].category == 'Personal') appendList(category); }
-    else if (category == 'hobbies') { if (taskList[i].category == 'Hobbies') appendList(category); }
-    else if (category == 'other') { if (taskList[i].category == 'Other') appendList(); }
-    else return;
+    appendList();
+    if (category == 'today') if (!isToday(new Date(taskList[i].date))) taskListDiv.children[i].style.display = 'none';
+    if (category == 'this week') if (!isThisWeek(new Date(taskList[i].date))) taskListDiv.children[i].style.display = 'none';
+    if (category == 'important') if (taskList[i].important != 'true') taskListDiv.children[i].style.display = 'none';
+    if (category == 'work') if (taskList[i].category != 'Work') taskListDiv.children[i].style.display = 'none';
+    if (category == 'personal') if (taskList[i].category != 'Personal') taskListDiv.children[i].style.display = 'none';
+    if (category == 'hobbies') if (taskList[i].category != 'Hobbies') taskListDiv.children[i].style.display = 'none';
+    if (category == 'other') if (taskList[i].category != 'Other') taskListDiv.children[i].style.display = 'none';
   };
 
   toggleDoneStatus(category);
@@ -145,7 +145,7 @@ const toggleImportantStatus = (category) => { // toggles importance status of a 
   };
 };
 
-const toggleTaskDetails = (category) => { // toggles display of the details window
+const toggleTaskDetails = () => { // toggles display of the details window
   const infoBtn = document.querySelectorAll('.info');
   for (let i=0; i < infoBtn.length; i++) {
     infoBtn[i].addEventListener('click', (e) => {
@@ -162,10 +162,13 @@ const toggleTaskDetails = (category) => { // toggles display of the details wind
       const important = taskList[taskId].important == 'true' ? 'yes' : 'no';
       detailsDiv.children[4].textContent = `Important: ${important}`;
 
+      editBtn.addEventListener('click', (e) => {
+        if (e.target.classList == 'details-btn edit-btn') editTaskLoad(taskId);
+      });
       // clicking anywhere on the body hides details window
       if (detailsDiv.style.display == 'flex') {
         body.addEventListener('click', (e) => {
-          if (e.target.classList != 'details-div' && e.target.classList != 'details-btn edit-btn' && e.target.classList != 'list-img info') detailsDiv.style.display = 'none';
+          if (e.target.classList != 'details-div' && e.target.classList != 'list-img info') detailsDiv.style.display = 'none';
         });
       };
     });

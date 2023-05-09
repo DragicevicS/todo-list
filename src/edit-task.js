@@ -1,13 +1,17 @@
-export default function addTaskLoad() {
+export default function editTaskLoad(id) {
   const newDiv = () => document.createElement('div');
   const newLabel = () => document.createElement('label');
   const newOption = () => document.createElement('option');
   const newInput = () => document.createElement('input');
 
+  let defaultTaskList = [];
+  let taskList = localStorage.getItem('taskList');
+  taskList = JSON.parse(taskList || JSON.stringify(defaultTaskList));
+
   const contentDiv = document.querySelector('.content');
   contentDiv.textContent = '';
   const h2 = document.createElement('h2');
-  h2.textContent = 'Add a task';
+  h2.textContent = 'Edit task';
   contentDiv.appendChild(h2);
 
   const form = document.createElement('form');
@@ -21,12 +25,12 @@ export default function addTaskLoad() {
   titleInput.setAttribute('id', 'title');
   titleInput.setAttribute('placeholder', 'What do you need to do?');
   titleInput.setAttribute('autocomplete', 'off');
-  titleInput.setAttribute('maxlength', '60');
+  titleInput.value = taskList[id].title;
   form.appendChild(titleLabel);
   form.appendChild(titleInput);
 
   const detailsLabel = newLabel();
-  detailsLabel.textContent = 'Details (optional)';
+  detailsLabel.textContent = 'Details';
   const detailsTextarea = document.createElement('textarea');
   detailsTextarea.setAttribute('name', 'details');
   detailsTextarea.setAttribute('id', 'details');
@@ -34,6 +38,7 @@ export default function addTaskLoad() {
   detailsTextarea.setAttribute('maxlength', '250');
   detailsTextarea.setAttribute('placeholder', 'Short description of the task...');
   detailsTextarea.setAttribute('autocomplete', 'off');
+  detailsTextarea.value = taskList[id].details;
   form.appendChild(detailsLabel);
   form.appendChild(detailsTextarea);
 
@@ -42,10 +47,6 @@ export default function addTaskLoad() {
   const categorySelect = document.createElement('select');
   categorySelect.setAttribute('name', 'category');
   categorySelect.setAttribute('id', 'category');
-  const optionBlank = newOption();
-  optionBlank.textContent = '';
-  optionBlank.selected = true;
-  optionBlank.value = '';
   const optionWork = newOption();
   optionWork.textContent = 'Work';
   optionWork.value = 'Work';
@@ -58,7 +59,10 @@ export default function addTaskLoad() {
   const optionOther = newOption();
   optionOther.textContent = 'Other';
   optionOther.value = 'Other';
-  categorySelect.appendChild(optionBlank);
+  if (taskList[id].category == 'Work') optionWork.selected = true;
+  if (taskList[id].category == 'Personal') optionPersonal.selected = true;
+  if (taskList[id].category == 'Hobbies') optionHobbies.selected = true;
+  if (taskList[id].category == 'Other') optionOther.selected = true;
   categorySelect.appendChild(optionWork);
   categorySelect.appendChild(optionPersonal);
   categorySelect.appendChild(optionHobbies);
@@ -83,10 +87,11 @@ export default function addTaskLoad() {
   importantInputNo.setAttribute('type', 'radio');
   importantInputNo.setAttribute('name', 'important');
   importantInputNo.setAttribute('id', 'false');
-  importantInputNo.checked = true;
   const importantInputNoLabel = newLabel();
   importantInputNoLabel.textContent = 'No';
   importantInputNoLabel.setAttribute('for', 'no');
+  if (taskList[id].important == 'true') importantInputYes.checked = true;
+  if (taskList[id].important == 'false') importantInputNo.checked = true;
   importantInputDiv.appendChild(importantInputYes);
   importantInputDiv.appendChild(importantInputYesLabel);
   importantInputDiv.appendChild(importantInputNo);
@@ -103,27 +108,24 @@ export default function addTaskLoad() {
   dateInput.setAttribute('type', 'date');
   dateInput.setAttribute('name', 'date');
   dateInput.setAttribute('id', 'date');
+  dateInput.value = taskList[id].date;
   dateDiv.appendChild(dateInput);
   form.appendChild(dateDiv);
 
   const btnDiv = newDiv();
   btnDiv.classList.add('btn-div');
-  const submitBtn = newInput();
-  submitBtn.setAttribute('type', 'submit');
-  submitBtn.setAttribute('name', 'submit');
-  submitBtn.setAttribute('id', 'submit');
-  submitBtn.classList.add('btn');
-  submitBtn.value = 'Add'
-  btnDiv.appendChild(submitBtn);
+  const submitEditBtn = newInput();
+  submitEditBtn.setAttribute('type', 'submit');
+  submitEditBtn.setAttribute('name', 'submit');
+  submitEditBtn.setAttribute('id', 'submit');
+  submitEditBtn.classList.add('btn');
+  submitEditBtn.value = 'Edit'
+  btnDiv.appendChild(submitEditBtn);
+  const cancelBtn = document.createElement('button');
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.classList.add('btn');
+  btnDiv.appendChild(cancelBtn);
   form.appendChild(btnDiv);
-
-  const createTask = (title, details, category, important, date, checked) => {
-    return {title, details, category, important, date, checked};
-  };
-  
-  let defaultTaskList = [];
-  let taskList = localStorage.getItem('taskList');
-  taskList = JSON.parse(taskList || JSON.stringify(defaultTaskList));
 
   const para = document.createElement('p');
   form.appendChild(para);
@@ -133,32 +135,25 @@ export default function addTaskLoad() {
       titleInput.style.borderColor = '#ff8080';
       para.textContent = 'Please fill out all the required fields.';
     } else titleInput.style.borderColor = '#BBE1FA';
-    if (optionBlank.selected) {
-      categorySelect.style.borderColor = '#ff8080';
-      para.textContent = 'Please fill out all the required fields.';
-    } else categorySelect.style.borderColor = '#BBE1FA';
     if (dateInput.value == '') {
       dateInput.style.borderColor = '#ff8080';
       para.textContent = 'Please fill out all the required fields.';
     } else dateInput.style.borderColor = '#BBE1FA';
   };
 
-  submitBtn.addEventListener('click', (e) => {
+  submitEditBtn.addEventListener('click', (e) => {
     e.preventDefault();
     validateForm();
-    if (titleInput.value != '' && !optionBlank.selected && dateInput.value != '') {
-      const taskList = JSON.parse(localStorage.getItem('taskList'));
-      const title = document.getElementById('title').value;
-      const details = document.getElementById('details').value;
-      const category = document.getElementById('category').value;
-      const important = document.querySelector('input[name="important"]:checked').id;
-      const date = document.getElementById('date').value;
+    if (titleInput.value != '' && dateInput.value != '') {
+      taskList[id].title = document.getElementById('title').value;
+      taskList[id].details = document.getElementById('details').value;
+      taskList[id].category = document.getElementById('category').value;
+      taskList[id].important = document.querySelector('input[name="important"]:checked').id;
+      taskList[id].date = document.getElementById('date').value;
 
-      const newTask = createTask(title, details, category, important, date, 'false');
-      taskList.push(newTask);
       window.localStorage.setItem('taskList', JSON.stringify(taskList));
-      
-      para.textContent = 'Task added successfully!'
+
+      para.textContent = 'Task edited successfully!'
     };
   });
 };
