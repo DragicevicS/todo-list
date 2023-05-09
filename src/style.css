@@ -66,6 +66,10 @@ header img:hover {
   letter-spacing: 2px;
 }
 
+.h1-div h1 {
+  cursor: pointer;
+}
+
 .profile-div {
   display: flex;
   gap: 1.2em;
@@ -85,6 +89,7 @@ nav {
   align-items: center;
   gap: 1em;
   padding: 3px;
+  height: max(100%, 40em);
   background-color: var(--color-3);
   font-family: 'Oswald', sans-serif;
   box-shadow: 0 0 10px;
@@ -119,16 +124,18 @@ nav li {
   align-items: center;
   gap: 0.5em;
   padding: 8px 1em;
-  color: var(--color-4);
+  color: var(--color-1);
   font-size: 1.5rem;
   cursor: pointer;
   transition: transform .1s ease;
+  border-radius: 10px;
 }
 
 nav ul li:hover {
   background-color: #0F4C75;
   transition: 0.3 ease-in-out;
   transform: scale(1.05);
+  color: var(--color-4);
 }
 
 nav li>img {
@@ -156,8 +163,8 @@ main {
   flex-direction: column;
   align-items: center;
   gap: 0.5em;
-  width: 80%;
-  height: 90%;
+  width: clamp(200px, 80%, 1000px);
+  height: 100%;
   padding: 1em;
   color: var(--color-4);
 }
@@ -200,8 +207,16 @@ main {
   border: solid 2px var(--color-2);
 }
 
+#category:hover,
+#date:hover,
+#submit:hover,
+#true:hover,
+#false:hover {
+  cursor: pointer;
+}
+
 #submit:hover {
-  color: var(--color-2);
+  transform: scale(1.05);
 }
 
 .content form textarea {
@@ -230,6 +245,7 @@ main {
   font-family: 'Sigmar', cursive;
   font-style: italic;
   font-size: 1.4rem;
+  transition: transform .2s ease;
 }
 
 /* main - lists */
@@ -240,7 +256,7 @@ main {
   gap: 5px;
   padding: 10px;
   width: 100%;
-  max-height: 100%;
+  height: 100%;
   font-family: 'Oswald', sans-serif;
   overflow: auto;
 }
@@ -251,11 +267,12 @@ main {
   align-items: center;
   gap: 0.7em;
   padding: 0 0.7em;
-  width: 100%;
+  width: max(100%, 30em);
   height: 3em;
   border: solid 1px var(--color-4);
   transition: transform .1s ease;
   text-decoration: line-through;
+  border-radius: 10px;
 }
 
 .list-img {
@@ -268,7 +285,7 @@ main {
 }
 
 .list-item:hover {
-  background-color: var(--color-3);
+  background-color: var(--color-2);
   transform: scale(1.01);
 }
 
@@ -278,11 +295,40 @@ main {
   position: absolute;
   flex-direction: column;
   align-items: flex-start;
-  width: 50%;
-  height: 50%;
-  background-color: var(--color-3);
+  gap: 0.5em;
+  padding: 1em;
+  width: 22em;
+  height: min-content;
+  background-color: var(--color-2);
   color: var(--color-4);
-  border: solid 1px black;
+  border: solid 2px var(--color-4);
+  border-radius: 10px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.3rem;
+}
+
+.details-btn-div {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1em;
+  width: 100%;
+}
+
+.details-btn {
+  width: 5em;
+  padding: 5px;
+  background-color: var(--color-2);
+  color: var(--color-4);
+  border: solid 2px var(--color-4);
+  border-radius: 10px;
+  transition: transform .2s ease;
+}
+
+.details-btn:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  border-color: var(--color-1);
 }
 
 /* footer */

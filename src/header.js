@@ -2,6 +2,7 @@ import sidebar from './images/sidebar.png';
 import account from './images/account.png';
 import add from './images/add.png';
 import addTaskLoad from './add-task';
+import { homeLoad } from './main';
 
 export default function headerLoad() {
   const header = document.querySelector('header');
@@ -58,4 +59,6 @@ export default function headerLoad() {
   // displaying "Add task" form on main
   addImg.addEventListener('click', addTaskLoad);
 
+  // loading home page by clicking on the title
+  h1.addEventListener('click', homeLoad);
 };

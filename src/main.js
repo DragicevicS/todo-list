@@ -10,6 +10,7 @@ const newDiv = () => document.createElement('div');
 const newImg = () => document.createElement('img');
 const newSpan = () => document.createElement('span');
 
+const body = document.querySelector('body');
 const main = document.querySelector('main');
 const contentDiv = document.querySelector('.content');
 const h2 = document.createElement('h2');
@@ -19,6 +20,24 @@ taskListDiv.classList.add('task-list-div');
 const detailsDiv = newDiv();
 detailsDiv.classList.add('details-div');
 detailsDiv.style.display = 'none';
+detailsDiv.appendChild(newDiv());
+detailsDiv.appendChild(newDiv());
+detailsDiv.appendChild(newDiv());
+detailsDiv.appendChild(newDiv());
+detailsDiv.appendChild(newDiv());
+detailsDiv.appendChild(newDiv());
+detailsDiv.lastElementChild.classList.add('details-btn-div');
+
+const editBtn = document.createElement('button');
+editBtn.setAttribute('type', 'button');
+editBtn.textContent = 'Edit';
+editBtn.classList.add('details-btn', 'edit-btn');
+const okBtn = document.createElement('button');
+okBtn.setAttribute('type', 'button');
+okBtn.textContent = 'Ok';
+okBtn.classList.add('details-btn', 'ok-btn');
+detailsDiv.lastElementChild.appendChild(editBtn);
+detailsDiv.lastElementChild.appendChild(okBtn);
 
 function listTasks(category) { // displays tasks filtering them based on category
   taskListDiv.textContent = '';
@@ -56,10 +75,12 @@ function listTasks(category) { // displays tasks filtering them based on categor
       if (task.checked == 'false') {
         taskInfo.appendChild(uncheckedImg);
         taskInfo.style.textDecoration = 'none';
+        taskInfo.style.opacity = '1';
       }
       if (task.checked == 'true') {
         taskInfo.appendChild(checkedImg);
         taskInfo.style.textDecoration = 'line-through';
+        taskInfo.style.opacity = '0.4';
       }
 
       const title = newSpan();
@@ -84,10 +105,10 @@ function listTasks(category) { // displays tasks filtering them based on categor
     else if (category == 'today') { if (isToday(new Date(taskList[i].date))) appendList(category); }
     else if (category == 'this week') { if (isThisWeek(new Date(taskList[i].date))) appendList(category); }
     else if (category == 'important') { if (taskList[i].important == 'true') appendList(category); }
-    else if (category == 'work') { if (taskList[i].category == 'Work') appendList(); removeTask(category); }
+    else if (category == 'work') { if (taskList[i].category == 'Work') appendList(); }
     else if (category == 'personal') { if (taskList[i].category == 'Personal') appendList(category); }
     else if (category == 'hobbies') { if (taskList[i].category == 'Hobbies') appendList(category); }
-    else if (category == 'other') { if (taskList[i].category == 'Other') appendList(); removeTask(category); }
+    else if (category == 'other') { if (taskList[i].category == 'Other') appendList(); }
     else return;
   };
 
@@ -124,24 +145,29 @@ const toggleImportantStatus = (category) => { // toggles importance status of a 
   };
 };
 
-const toggleTaskDetails = (category) => {
+const toggleTaskDetails = (category) => { // toggles display of the details window
   const infoBtn = document.querySelectorAll('.info');
   for (let i=0; i < infoBtn.length; i++) {
     infoBtn[i].addEventListener('click', (e) => {
       const taskId = e.target.closest('div').id;
       const taskList = JSON.parse(localStorage.getItem('taskList'));
-      detailsDiv.style.display = 'flex';
-      detailsDiv.appendChild(newDiv());
-      detailsDiv.appendChild(newDiv());
-      detailsDiv.appendChild(newDiv());
-      detailsDiv.appendChild(newDiv());
-      detailsDiv.appendChild(newDiv());
+
+      // display information about selected task
+      detailsDiv.style.display = detailsDiv.style.display == 'flex' ? 'none' : 'flex';
       detailsDiv.firstElementChild.textContent = `Title: ${taskList[taskId].title}`;
-      detailsDiv.children[1].textContent = `Details: ${taskList[taskId].details}`;
+      const details = taskList[taskId].details == '' ? 'none' : taskList[taskId].details;
+      detailsDiv.children[1].textContent = `Details: ${details}`;
       detailsDiv.children[2].textContent = `Due date: ${taskList[taskId].date}`;
       detailsDiv.children[3].textContent = `Category: ${taskList[taskId].category}`;
-      localStorage.setItem('taskList', JSON.stringify(taskList));
-      listTasks(category);
+      const important = taskList[taskId].important == 'true' ? 'yes' : 'no';
+      detailsDiv.children[4].textContent = `Important: ${important}`;
+
+      // clicking anywhere on the body hides details window
+      if (detailsDiv.style.display == 'flex') {
+        body.addEventListener('click', (e) => {
+          if (e.target.classList != 'details-div' && e.target.classList != 'details-btn edit-btn' && e.target.classList != 'list-img info') detailsDiv.style.display = 'none';
+        });
+      };
     });
   };
 };
@@ -159,6 +185,7 @@ const removeTask = (category) => { // removing tasks from locale storage
   };
 };
 
+// loading functions for each category
 export function homeLoad() {
   contentDiv.textContent = '';
   h2.textContent = 'Home - All Tasks';
